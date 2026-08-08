@@ -1,0 +1,9 @@
+# Data lokasi yang terkumpul — JANGAN PERNAH di-push ke repo publik!
+data_bank.txt
+
+# Log
+server.log
+*.log
+
+# Node
+node_modules/
