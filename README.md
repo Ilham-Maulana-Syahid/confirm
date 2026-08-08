@@ -23,6 +23,10 @@ node server.js
    `https://USERNAME.github.io/NAMA-REPO/`
 5. Buka link transaksi:
    `https://USERNAME.github.io/NAMA-REPO/?id=562312345678`
+   (URL root otomatis diarahkan ke `konfirmasi.html` lewat `index.html`)
+
+> Di **Netlify**: hubungkan repo yang sama (**Netlify → Add new site → Import an existing project → GitHub**),
+> biarkan build command kosong (situs statis) — deploy otomatis setiap kali Anda `git push`.
 
 Semua link di halaman sudah **relatif**, jadi tidak perlu ubah apa pun soal path.
 
@@ -56,12 +60,28 @@ Lalu link-nya: `https://USERNAME.github.io/NAMA-REPO/?id=562312345678`
 
 | File | Fungsi |
 |---|---|
+| `index.html` | Pengalih root — URL `https://situs/?id=...` diarahkan ke `konfirmasi.html` |
 | `konfirmasi.html` | Halaman utama — tampilkan data & minta lokasi |
 | `sukses.html` | Halaman setelah izin lokasi diberikan |
 | `tolak.html` | Halaman saat izin lokasi ditolak |
-| `config.js` | Daftar data transaksi (id/nama/rekening/nominal) |
-| `server.js` | Server lokal opsional (untuk tes di laptop; **tidak dipakai** di GitHub Pages) |
+| `config.js` | Daftar data transaksi bawaan (id/nama/rekening/nominal) |
+| `data.js` | Pemuat data: pakai hasil edit localStorage jika ada, kalau tidak pakai `config.js` |
+| `admin.html` | **Dashboard admin** — kelola data lewat UI (lihat bagian di bawah) |
+| `server.js` | Server lokal opsional (untuk tes di laptop; **tidak dipakai** di GitHub Pages/Netlify) |
 | `test_uji.sh` | Script tes otomatis endpoint (jalankan: `bash test_uji.sh`) |
+
+## 🛠️ Dashboard admin (`admin.html`)
+
+Buka `https://SITUS-ANDA/admin.html` lalu masukkan passphrase (default: `admin123` — ganti di `admin.html`).
+
+Di dashboard ini Anda bisa:
+- **Tambah / ubah / hapus** transaksi lewat form & tabel.
+- **Salin link** lengkap untuk setiap id (isi dulu kolom “Domain situs Anda”).
+- **Salin / unduh `config.js`** berisi data terbaru — tempel ke file `config.js` lalu `git push`, Netlify/GitHub Pages auto-deploy.
+
+> ⚠️ **Data yang diedit di dashboard tersimpan di localStorage browser tersebut saja** (untuk pratinjau cepat).
+> Agar **semua orang** melihat data baru, gunakan tombol **“Salin config.js”** → tempel ke `config.js` → push.
+> Tombol “Kembali ke data bawaan” menghapus edit lokal dan memakai `config.js` lagi.
 
 ## 🧭 Catatan
 

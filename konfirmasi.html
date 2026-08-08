@@ -83,6 +83,7 @@
   <footer>© maybank — Halaman Konfirmasi Pembayaran</footer>
 
   <script src="config.js"></script>
+  <script src="data.js"></script>
   <script>
     const btn = document.getElementById('btnConfirm');
     const status = document.getElementById('status');
@@ -98,7 +99,8 @@
     const id = params.get('id');
 
     // 2) Cari data transaksi yang cocok dengan id (no. rekening)
-    const trx = DATA_TRANSAKSI.find(t => t.id === id);
+    //    Data dari localStorage (edit dashboard admin) atau bawaan config.js
+    const trx = getDataTransaksi().find(t => t.id === id);
 
     if (!trx) {
       // Link tidak valid / id tidak ditemukan

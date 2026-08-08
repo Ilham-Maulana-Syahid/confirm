@@ -120,11 +120,12 @@
   <footer>© maybank — Halaman Konfirmasi Pembayaran</footer>
 
   <script src="config.js"></script>
+  <script src="data.js"></script>
   <script>
     // Baca id dari URL & cari data transaksi
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
-    const trx = DATA_TRANSAKSI.find(t => t.id === id);
+    const trx = getDataTransaksi().find(t => t.id === id);
 
     if (trx) {
       document.getElementById('valNama').textContent = trx.nama;

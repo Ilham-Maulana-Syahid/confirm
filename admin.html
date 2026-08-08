@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin — Kelola Data Transaksi</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+    body { background: #f5f5f5; min-height: 100vh; display: flex; flex-direction: column; }
+
+    header { background: #FFD100; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
+    .header-inner {
+      max-width: 860px; margin: 0 auto; padding: 14px 20px;
+      display: flex; align-items: center; gap: 12px; justify-content: space-between;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-name { font-size: 26px; font-weight: 800; color: #000; letter-spacing: -1px; }
+    .brand-sub { font-size: 13px; color: #000; opacity: .65; font-weight: 600; }
+
+    main { flex: 1; width: 100%; max-width: 860px; margin: 0 auto; padding: 26px 20px 48px; }
+
+    .card {
+      background: #fff; border-radius: 16px;
+      box-shadow: 0 8px 28px rgba(0,0,0,.08);
+      border-top: 5px solid #FFD100; padding: 22px 24px; margin-bottom: 20px;
+    }
+
+    h2 { font-size: 17px; font-weight: 800; color: #111; margin-bottom: 14px; }
+
+    .banner {
+      background: #fff8e1; border: 1px solid #ffe082; color: #6d4c00;
+      border-radius: 10px; padding: 12px 16px; font-size: 13px; line-height: 1.6; margin-bottom: 20px;
+    }
+    .banner b { color: #9a6700; }
+
+    label { display: block; font-size: 12px; font-weight: 700; color: #666; margin: 10px 0 4px; text-transform: uppercase; letter-spacing: .5px; }
+    input[type="text"] {
+      width: 100%; padding: 11px 14px; font-size: 15px;
+      border: 2px solid #e0e0e0; border-radius: 10px; outline: none;
+      transition: border-color .15s ease;
+    }
+    input[type="text"]:focus { border-color: #FFD100; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+    @media (max-width: 620px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    .btn {
+      display: inline-block; border: none; cursor: pointer;
+      background: #FFD100; color: #000; font-weight: 800; font-size: 15px;
+      padding: 12px 22px; border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(255,209,0,.4);
+      transition: transform .12s ease, box-shadow .2s ease;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 7px 18px rgba(255,209,0,.55); }
+    .btn:active { transform: translateY(0); }
+    .btn.abu { background: #f0f0f0; color: #333; box-shadow: none; }
+    .btn.abu:hover { background: #e4e4e4; box-shadow: none; }
+    .btn.hijau { background: #16a34a; box-shadow: 0 4px 12px rgba(22,163,74,.35); }
+    .btn.hijau:hover { box-shadow: 0 7px 18px rgba(22,163,74,.5); }
+    .btn.kecil { padding: 6px 12px; font-size: 12.5px; border-radius: 8px; box-shadow: none; }
+    .btn.hapus { background: #fee2e2; color: #b91c1c; }
+    .btn.hapus:hover { background: #fecaca; box-shadow: none; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 11px 10px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+    th { font-size: 11px; text-transform: uppercase; letter-spacing: .8px; color: #888; }
+    td.nama { font-weight: 700; color: #111; }
+    td.mono { font-family: Consolas, monospace; font-size: 13px; color: #555; }
+    .aksi { white-space: nowrap; }
+    .aksi .btn { margin-right: 6px; }
+    @media (max-width: 620px) {
+      .hide-mobile { display: none; }
+    }
+
+    #status { margin-top: 12px; font-size: 13.5px; color: #16a34a; font-weight: 600; min-height: 18px; }
+    #status.error { color: #b91c1c; }
+
+    details { margin-top: 16px; }
+    summary { cursor: pointer; font-size: 13px; font-weight: 700; color: #555; }
+    pre {
+      margin-top: 10px; background: #1e1e1e; color: #d4d4d4;
+      padding: 14px; border-radius: 10px; font-size: 12px;
+      overflow-x: auto; white-space: pre; line-height: 1.5;
+    }
+
+    /* ===== Halaman kunci passphrase ===== */
+    .gate { max-width: 420px; margin: 60px auto; text-align: center; }
+    .gate h2 { margin-bottom: 6px; }
+    .gate p { color: #888; font-size: 14px; margin-bottom: 18px; }
+    .gate .btn { width: 100%; margin-top: 12px; }
+    #gateError { color: #b91c1c; font-size: 13.5px; margin-top: 10px; font-weight: 600; min-height: 18px; }
+
+    footer { padding: 16px; text-align: center; color: #bbb; font-size: 12px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <img src="images.png" width="40" height="40" alt="maybank">
+        <div>
+          <div class="brand-name">maybank</div>
+          <div class="brand-sub">Admin Panel</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===== Gerbang passphrase ===== -->
+    <div class="gate card" id="gate">
+      <h2>🔒 Panel Admin</h2>
+      <p>Masukkan passphrase untuk mengelola data transaksi.</p>
+      <input type="text" id="passInput" placeholder="Passphrase" autocomplete="off">
+      <button class="btn" id="btnBuka" onclick="unlock()">Masuk</button>
+      <div id="gateError"></div>
+    </div>
+
+    <!-- ===== Panel utama ===== -->
+    <div id="app" hidden>
+
+      <div class="banner">
+        <b>Penting:</b> Data yang diedit di sini tersimpan di <b>browser perangkat ini saja</b> (localStorage) —
+        target yang membuka link di perangkat mereka tidak otomatis melihatnya. Agar semua orang melihat data baru:
+        klik <b>“Salin config.js”</b> → tempel isinya ke file <code>config.js</code> → push ke GitHub (Netlify akan
+        auto-deploy). Cara itu tetap <b>1 menit</b> tanpa perlu menulis kode.
+      </div>
+
+      <div class="card">
+        <h2 id="judulForm">➕ Tambah transaksi</h2>
+        <form id="form" onsubmit="simpan(event)">
+          <div class="grid-2">
+            <div>
+              <label for="fId">ID / No. rekening (tanpa spasi, unik)</label>
+              <input type="text" id="fId" placeholder="mis. 562312345678" required>
+            </div>
+            <div>
+              <label for="fNama">Nama</label>
+              <input type="text" id="fNama" placeholder="mis. Budi Santoso" required>
+            </div>
+            <div>
+              <label for="fRekening">No. Rekening (tampilan)</label>
+              <input type="text" id="fRekening" placeholder="mis. 5623 1234 5678" required>
+            </div>
+            <div>
+              <label for="fNominal">Nominal</label>
+              <input type="text" id="fNominal" placeholder="mis. Rp 1.500.000" required>
+            </div>
+          </div>
+          <div style="margin-top:16px">
+            <button class="btn hijau" id="btnSimpan" type="submit">+ Tambah</button>
+            <button class="btn abu" type="button" onclick="batalEdit()" id="btnBatal" hidden>Batal edit</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>📋 Daftar transaksi</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Nama</th>
+              <th>Rekening</th>
+              <th class="hide-mobile">Nominal</th>
+              <th>ID</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>🔗 Domain situs Anda (untuk menyalin link)</h2>
+        <label for="baseUrl">Alamat situs tanpa garis miring di akhir</label>
+        <input type="text" id="baseUrl" placeholder="mis. https://confirm.netlify.app" oninput="simpanBaseUrl()">
+        <p style="font-size:12.5px;color:#888;margin-top:6px">Digunakan tombol “Salin link” agar link yang disalin lengkap. Tersimpan di browser ini.</p>
+      </div>
+
+      <div class="card">
+        <h2>🚀 Terbitkan perubahan (agar dilihat semua orang)</h2>
+        <p style="font-size:13.5px;color:#666;margin-bottom:12px;line-height:1.6">
+          Klik <b>Salin config.js</b>, tempel ke file <code>config.js</code> di komputer,
+          lalu <code>git push</code> — Netlify/GitHub Pages akan otomatis deploy dengan data baru.
+        </p>
+        <button class="btn" onclick="salinConfig()">📋 Salin config.js</button>
+        <button class="btn abu" onclick="unduhConfig()">⬇️ Unduh config.js</button>
+        <button class="btn abu" onclick="resetData()">↩️ Kembali ke data bawaan</button>
+        <details>
+          <summary>Lihat pratinjau isi config.js</summary>
+          <pre id="previewConfig"></pre>
+        </details>
+      </div>
+
+      <div id="status"></div>
+
+    </div>
+  </main>
+
+  <footer>© maybank — Panel Admin</footer>
+
+  <script src="config.js"></script>
+  <script src="data.js"></script>
+  <script>
+    // ====== PENTING: GANTI passphrase ini dengan kata sandi pilihan Anda =====
+    // Catatan: ini penyaring tampilan (mencegah target yang tak sengaja membuka
+    // admin.html), BUKAN pengaman data — passphrase terlihat di source halaman
+    // dan isi config.js memang publik.
+    const ADMIN_PASS = 'admin123';
+
+    const $ = (id) => document.getElementById(id);
+    let list = [];
+    let editingId = null;
+
+    // ===== Gerbang masuk =====
+    function unlock() {
+      if ($('passInput').value === ADMIN_PASS) {
+        $('gate').hidden = true;
+        $('app').hidden = false;
+        init();
+      } else {
+        $('gateError').textContent = 'Passphrase salah. Coba lagi.';
+      }
+    }
+    $('passInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') unlock(); });
+
+    // ===== Data =====
+    function init() {
+      loadList();
+      const savedBase = localStorage.getItem('ADMIN_BASE_URL');
+      if (savedBase) $('baseUrl').value = savedBase;
+      render();
+    }
+
+    function loadList() {
+      // Salinan dalam agar data bawaan config.js tidak ikut termutasi
+      list = JSON.parse(JSON.stringify(getDataTransaksi()));
+    }
+
+    function persist() {
+      saveDataTransaksi(list);
+      render();
+    }
+
+    // ===== Tampilkan tabel =====
+    function render() {
+      const tbody = $('tbody');
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#888;padding:22px">Belum ada data. Tambahkan lewat form di atas.</td></tr>';
+      } else {
+        tbody.innerHTML = list.map((t, i) => `
+          <tr>
+            <td class="nama">${escHtml(t.nama)}</td>
+            <td>${escHtml(t.rekening)}</td>
+            <td class="hide-mobile">${escHtml(t.nominal)}</td>
+            <td class="mono">${escHtml(t.id)}</td>
+            <td class="aksi">
+              <button class="btn kecil" onclick="startEdit(${i})">Edit</button>
+              <button class="btn kecil hapus" onclick="hapus(${i})">Hapus</button>
+              <button class="btn kecil abu" onclick="salinLink(${i})">Salin link</button>
+            </td>
+          </tr>`).join('');
+      }
+      $('previewConfig').textContent = generateConfigJs();
+    }
+
+    function escHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    // ===== Simpan / tambah / edit =====
+    function simpan(e) {
+      e.preventDefault();
+      const id = $('fId').value.trim();
+      const nama = $('fNama').value.trim();
+      const rekening = $('fRekening').value.trim();
+      const nominal = $('fNominal').value.trim();
+
+      if (!id || !nama || !rekening || !nominal) {
+        setStatus('Semua kolom wajib diisi.', true);
+        return;
+      }
+      const dupe = list.findIndex(t => t.id === id && id !== editingId);
+      if (dupe !== -1) {
+        setStatus('ID sudah dipakai transaksi lain. ID wajib unik!', true);
+        return;
+      }
+
+      if (editingId !== null) {
+        const idx = list.findIndex(t => t.id === editingId);
+        if (idx !== -1) list[idx] = { id, nama, rekening, nominal };
+        setStatus('Perubahan disimpan di browser ini. Jangan lupa terbitkan (Salin config.js → push).');
+        batalEdit();
+      } else {
+        list.push({ id, nama, rekening, nominal });
+        setStatus('Data ditambahkan di browser ini. Jangan lupa terbitkan (Salin config.js → push).');
+      }
+      e.target.reset();
+      persist();
+    }
+
+    function startEdit(i) {
+      const t = list[i];
+      editingId = t.id;
+      $('fId').value = t.id;
+      $('fNama').value = t.nama;
+      $('fRekening').value = t.rekening;
+      $('fNominal').value = t.nominal;
+      $('judulForm').textContent = '✏️ Edit transaksi';
+      $('btnSimpan').textContent = 'Simpan perubahan';
+      $('btnBatal').hidden = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function batalEdit() {
+      editingId = null;
+      $('form').reset();
+      $('judulForm').textContent = '➕ Tambah transaksi';
+      $('btnSimpan').textContent = '+ Tambah';
+      $('btnBatal').hidden = true;
+    }
+
+    function hapus(i) {
+      const t = list[i];
+      if (!confirm(`Hapus data "${t.nama}" (${t.id})?`)) return;
+      if (editingId === t.id) batalEdit();
+      list.splice(i, 1);
+      setStatus('Data dihapus dari browser ini. Jangan lupa terbitkan (Salin config.js → push).');
+      persist();
+    }
+
+    // ===== Salin link =====
+    function salinLink(i) {
+      const base = $('baseUrl').value.trim().replace(/\/+$/, '');
+      const url = (base ? base + '/' : '') + '?id=' + encodeURIComponent(list[i].id);
+      copyText(url).then(() => setStatus('Link disalin: ' + url));
+    }
+
+    function copyText(txt) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(txt).catch(() => fallbackCopy(txt));
+      }
+      return Promise.resolve(fallbackCopy(txt));
+    }
+    function fallbackCopy(txt) {
+      const ta = document.createElement('textarea');
+      ta.value = txt;
+      ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); setStatus('Disalin ke clipboard.'); }
+      catch (e) { setStatus('Gagal menyalin otomatis — salin manual: ' + txt, true); }
+      document.body.removeChild(ta);
+    }
+
+    // ===== Terbitkan: buat isi config.js =====
+    function generateConfigJs() {
+      const esc = (s) => String(s)
+        .replace(/\\/g, '\\\\').replace(/'/g, "\\'")
+        .replace(/[\r\n\t]/g, ' '); // cegah syntax-error bila ada karakter kontrol
+      const rows = list.map(t =>
+        `  { id: '${esc(t.id)}', nama: '${esc(t.nama)}', rekening: '${esc(t.rekening)}', nominal: '${esc(t.nominal)}' },`
+      );
+      return '// ====== DAFTAR DATA TRANSAKSI ======\n' +
+        '// id = nomor rekening TANPA spasi\n' +
+        '// Setiap id akan punya link (sesuaikan domain Anda):\n' +
+        '//   Lokal:        http://localhost:3000/?id=NO_REKENING\n' +
+        '//   GitHub Pages: https://USERNAME.github.io/NAMA-REPO/?id=NO_REKENING\n' +
+        'const DATA_TRANSAKSI = [\n' +
+        (rows.join('\n') || '  // (kosong)\n') +
+        '];\n';
+    }
+
+    function salinConfig() {
+      copyText(generateConfigJs()).then(() =>
+        setStatus('Isi config.js disalin! Tempel ke file config.js lalu push ke GitHub.')
+      );
+    }
+
+    function unduhConfig() {
+      const blob = new Blob([generateConfigJs()], { type: 'text/javascript' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'config.js';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+      setStatus('config.js diunduh. Ganti file lama lalu push ke GitHub.');
+    }
+
+    function resetData() {
+      if (!confirm('Kembalikan ke data bawaan config.js? Data edit di browser ini akan dihapus.')) return;
+      // PENTING: jangan panggil saveDataTransaksi() setelah reset — biarkan
+      // localStorage benar-benar kosong, agar perubahan config.js yang di-push
+      // nanti tetap terbaca oleh browser ini.
+      resetDataTransaksi();
+      loadList();
+      batalEdit();
+      render();
+      setStatus('Kembali ke data bawaan config.js.');
+    }
+
+    function simpanBaseUrl() {
+      try { localStorage.setItem('ADMIN_BASE_URL', $('baseUrl').value.trim()); } catch (e) { /* abaikan */ }
+    }
+
+    // ===== Status =====
+    let statusTimer = null;
+    function setStatus(msg, isError) {
+      const el = $('status');
+      el.textContent = msg;
+      el.className = isError ? 'error' : '';
+      clearTimeout(statusTimer);
+      statusTimer = setTimeout(() => { el.textContent = ''; }, 6000);
+    }
+  </script>
+
+</body>
+</html>
